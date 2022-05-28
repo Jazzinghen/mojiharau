@@ -1,7 +1,12 @@
 [package]
 name = "mojiharau"
+description = "Mokibake'd Zipfiles fixer"
+authors = ["Michele Bianchi <MicheleBianchi@pm.me>"]
 version = "0.1.0"
 edition = "2021"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/Jazzinghen/mojiharau"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
