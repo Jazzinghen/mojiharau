@@ -8,6 +8,13 @@ license-file = "LICENSE"
 readme = "README.md"
 repository = "https://github.com/Jazzinghen/mojiharau"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+strip = true
+
+[profile.test]
+strip = true
 
 [dependencies]
+zip = ">=0.6"
+clap = {version = ">=3.1", features = ["derive", "unicode"]}
+encoding_rs = ">=0.8"
