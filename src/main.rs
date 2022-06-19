@@ -9,7 +9,7 @@ use mojiharau::{fix_mojibake, Config};
 struct CLIConfig {
     /// Mojibake'd file to fix
     #[clap(parse(try_from_str=check_and_canonicalize))]
-    name: PathBuf,
+    source: PathBuf,
 
     /// Output filename. If not set the output will be the source filename +
     /// "-fixed"
@@ -30,36 +30,34 @@ fn check_and_canonicalize(s: &str) -> std::io::Result<PathBuf> {
     actual_path.canonicalize()
 }
 
-fn main() {
+fn main() -> Result<(), mojiharau::ZipError> {
     let user_config = CLIConfig::parse();
 
-    println!("Chosen file: {}", user_config.name.display());
-    if let Some(output_path) = user_config.output.as_ref() {
-        println!("Provided output: {}", output_path.display());
-    }
-    println!("Unpack archive as well? {}", user_config.unpack);
+    println!("Chosen file: {}", user_config.source.display());
 
     let target_file_name = match user_config.output.as_ref() {
         Some(path) => path.clone(),
         None => {
-            let archive_name = user_config.name.file_stem().unwrap();
+            let archive_name = user_config.source.file_stem().unwrap();
             let fixed_name = format!("{}-fixed", archive_name.to_str().unwrap());
-            let mut final_path = PathBuf::from(user_config.name.parent().unwrap());
+            let mut final_path = PathBuf::from(user_config.source.parent().unwrap());
             final_path.push(fixed_name);
-            if let Some(ext) = user_config.name.extension() {
+            if let Some(ext) = user_config.source.extension() {
                 final_path.set_extension(ext);
             }
             final_path
         }
     };
 
-    println!("Fixed file path: {}", target_file_name.display());
+    if user_config.verbose {
+        println!("Output file path: {}", target_file_name.display());
+    }
 
     let fix_config = Config {
-        input: user_config.name,
+        input: user_config.source,
         output: target_file_name,
         unpack: user_config.unpack,
     };
 
-    fix_mojibake(&fix_config, user_config.verbose).unwrap();
+    fix_mojibake(&fix_config, user_config.verbose)
 }

@@ -2,7 +2,7 @@
 name = "mojiharau"
 description = "Mokibake'd Zipfiles fixer"
 authors = ["Michele Bianchi <MicheleBianchi@pm.me>"]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license-file = "LICENSE"
 readme = "README.md"
@@ -18,3 +18,11 @@ strip = true
 zip = ">=0.6"
 clap = {version = ">=3.1", features = ["derive", "unicode"]}
 encoding_rs = ">=0.8"
+druid = { git = "https://github.com/linebender/druid.git", optional = true }
+
+[features]
+gui = ["dep:druid"]
+
+[[bin]]
+name = "mojiharau-gui"
+required-features = ["gui"]
